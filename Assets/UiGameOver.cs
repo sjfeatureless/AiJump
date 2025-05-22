@@ -3,13 +3,21 @@ using UnityEngine;
 public class EnemyCollisionGameOver : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI; // Assign this in the Inspector
+    [SerializeField] private Transform player; // Assign the Player transform in the Inspector
+    [SerializeField] private float gameOverDistance = 1f; // Distance at which to trigger Game Over
+    private bool hasGameOverTriggered = false;
 
-    void OnCollisionEnter(Collision collision)
+    void Update()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (hasGameOverTriggered || player == null) return;
+
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance <= gameOverDistance)
         {
-            Debug.LogWarning("Not working");
-            // Activate the Game Over UI
+            hasGameOverTriggered = true;
+            Debug.Log("Player is within range. Game Over triggered.");
+
             if (gameOverUI != null)
             {
                 gameOverUI.SetActive(true);
